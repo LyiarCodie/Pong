@@ -49,7 +49,7 @@ namespace Pongo2
         public Vector2 Center
         {
             get => new Vector2(this.X + this.Width * 0.5f, this.Y + this.Height * 0.5f);
-            set => this.Position = new Vector2(value.X - this.Width * 0.5f, value.Y + this.Height * 0.5f);
+            set => this.Position = new Vector2(value.X - this.Width * 0.5f, value.Y - this.Height * 0.5f);
         }
         public RectangleF(float x, float y, float width, float height)
         {

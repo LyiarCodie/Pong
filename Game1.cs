@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pongo3.Characters;
 using Pongo3.Utils;
 
 namespace Pongo3
@@ -9,6 +10,12 @@ namespace Pongo3
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+
+        private Texture2D pixel;
+
+        private PlayerPaddle playerPaddle;
+        private CPUPaddle cpuPaddle;
+        private float Scale;
 
         public Game1()
         {
@@ -19,7 +26,7 @@ namespace Pongo3
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            this.Scale = 2f;
 
             base.Initialize();
         }
@@ -28,7 +35,12 @@ namespace Pongo3
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            this.pixel = Content.Load<Texture2D>("whitepixel");
+
+            var paddleTexture = Content.Load<Texture2D>("paddle");
+            this.playerPaddle = new PlayerPaddle(this, paddleTexture, this.Scale, new Vector2(15f, this.GraphicsDevice.Viewport.Height * 0.5f));
+            this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(this.GraphicsDevice.Viewport.Width - 15f,
+                                                                                        this.GraphicsDevice.Viewport.Height * 0.5f));
         }
 
         protected override void Update(GameTime gameTime)
@@ -43,7 +55,10 @@ namespace Pongo3
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            this.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            this.playerPaddle.Draw(this.spriteBatch, this.pixel);
+            this.cpuPaddle.Draw(this.spriteBatch, this.pixel);
+            this.spriteBatch.End();
 
             base.Draw(gameTime);
         }
