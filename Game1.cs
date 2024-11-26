@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pongo3.Utils;
 
 namespace Pongo3
 {
@@ -32,10 +33,8 @@ namespace Pongo3
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
+            KeyboardManager.Update();
+            if (KeyboardManager.IsKeyPress(Keys.Escape)) this.Exit();
 
             base.Update(gameTime);
         }
