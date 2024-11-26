@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pongo3", "Pongo3.csproj", "{CAC07C38-6E41-4E40-8E26-88D852F7D745}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAC07C38-6E41-4E40-8E26-88D852F7D745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC07C38-6E41-4E40-8E26-88D852F7D745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC07C38-6E41-4E40-8E26-88D852F7D745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC07C38-6E41-4E40-8E26-88D852F7D745}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C04B555-1DE1-491F-B476-CDE140D3AB12}
+	EndGlobalSection
+EndGlobal
