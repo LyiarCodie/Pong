@@ -43,13 +43,13 @@ namespace Pongo3
             var dividingLineTexture = Content.Load<Texture2D>("dividing_line");
             this.dividingLine = new DividingLine(dividingLineTexture, new Vector2(screenSize.X * 0.5f, 0f), this.Scale);
 
-            var paddleTexture = Content.Load<Texture2D>("paddle");
-            this.playerPaddle = new PlayerPaddle(this, paddleTexture, this.Scale, new Vector2(15f, screenSize.Y * 0.5f));
-            this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(screenSize.X - 15f, screenSize.Y * 0.5f));
-
             var ballTexture = Content.Load<Texture2D>("ball");
             this.ball = new Ball(this, ballTexture, this.Scale);
             this.ball.Bounds.Center = screenSize * 0.5f;
+
+            var paddleTexture = Content.Load<Texture2D>("paddle");
+            this.playerPaddle = new PlayerPaddle(this, paddleTexture, this.Scale, new Vector2(15f, screenSize.Y * 0.5f));
+            this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(screenSize.X - 15f, screenSize.Y * 0.5f), this.ball);
         }
 
         protected override void Update(GameTime gameTime)

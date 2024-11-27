@@ -7,7 +7,7 @@ namespace Pongo3.Characters
     internal class Ball
     {
         private Texture2D texture;
-        private Vector2 velocity;
+        public Vector2 Velocity { get; private set; }
         public RectangleF Bounds { get; private set; }
         private float moveSpeed;
         private float normalize;
@@ -18,26 +18,26 @@ namespace Pongo3.Characters
             this.texture = texture;
             this.Bounds = new RectangleF(Vector2.Zero, this.texture.Bounds.Size.ToVector2() * scale);
             this.moveSpeed = 4f;
-            this.velocity = new Vector2(-1f, -1f) / 1.25f;
+            this.Velocity = new Vector2(-1f, -1f) / 1.25f;
         }
         public void Update()
         {
             if (this.Bounds.Top < 0f)
             {
                 this.Bounds.Top = 0f;
-                this.velocity.Y *= -1f;
+                this.Velocity = new Vector2(this.Velocity.X, this.Velocity.Y * -1f);
             }
             if (this.Bounds.Bottom > this.screenSize.Y)
             {
                 this.Bounds.Bottom = this.screenSize.Y;
-                this.velocity.Y *= -1f;
+                this.Velocity = new Vector2(this.Velocity.X, this.Velocity.Y * -1f);
             }
 
-            this.Bounds.Position += this.velocity * this.moveSpeed;
+            this.Bounds.Position += this.Velocity * this.moveSpeed;
         }
         public void InvertVelocityX()
         {
-            this.velocity.X *= -1;
+            this.Velocity = new Vector2(this.Velocity.X * -1f, this.Velocity.Y);
         }
         public void Draw(SpriteBatch sb, Texture2D pixel)
         {

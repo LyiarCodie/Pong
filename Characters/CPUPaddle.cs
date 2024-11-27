@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Runtime.Intrinsics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,10 +9,21 @@ namespace Pongo3.Characters
     internal class CPUPaddle : Paddle
     {
         private bool IsControllable;
-        public CPUPaddle(Game game, Texture2D texture, float scale, Vector2 position) : base(game, texture, scale, position)
+        private Ball ball;
+        private float maxSpeed;
+        private float acceleration;
+        private float resistence;
+        private Vector2 screenCenter;
+        public CPUPaddle(Game game, Texture2D texture, float scale, Vector2 position, Ball ball) : base(game, texture, scale, position)
         {
             this.SetFlipX();
-            this.IsControllable = true;
+            this.IsControllable = false;
+            this.ball = ball;
+
+            this.maxSpeed = 7f;
+            this.acceleration = 0.25f;
+            this.resistence = 0.4f;
+            this.screenCenter = this.ScreenSize * 0.5f;
         }
         public override void Update()
         {
@@ -18,7 +31,40 @@ namespace Pongo3.Characters
                 this.Move(Keys.I, Keys.K);
             else
             {
-                //
+                float dist = MathHelper.Distance(this.ball.Bounds.Center.Y, this.Bounds.Center.Y);
+                if (dist > 5f && this.ball.Velocity.X > 0f)
+                {
+                    // paddle is above the ball
+                    if (this.Bounds.Center.Y < this.ball.Bounds.Center.Y)
+                    {
+                        if (this.Velocity.Y < this.maxSpeed)
+                            this.Velocity.Y += this.acceleration;
+                    }
+                    // paddle is under the ball
+                    if (this.Bounds.Center.Y > this.ball.Bounds.Center.Y)
+                    {
+                        if (this.Velocity.Y > -this.maxSpeed)
+                            this.Velocity.Y -= this.acceleration;
+                    }
+                    this.Bounds.Position += this.Velocity;
+                }
+                else
+                {
+                    // paddle is above the screen center
+                    if (this.Bounds.Center.Y < this.screenCenter.Y)
+                    {
+                        if (this.Velocity.Y < this.maxSpeed)
+                            this.Velocity.Y += this.acceleration;
+                    }
+                    // paddle is under the screen center
+                    if (this.Bounds.Center.Y > this.screenCenter.Y)
+                    {
+                        if (this.Velocity.Y > -this.maxSpeed)
+                            this.Velocity.Y -= this.acceleration;
+                    }
+                    this.Bounds.Position += this.Velocity * this.resistence;
+                }
+
             }
 
             this.ConstrainToScreenBounds();
