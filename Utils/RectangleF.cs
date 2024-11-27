@@ -67,7 +67,7 @@ namespace Pongo2
         }
         public bool Intersects(RectangleF other)
         {
-            return Top < other.Bottom && Right > other.Left && Bottom > other.Top && Left < Right;
+            return this.Top < other.Bottom && this.Right > other.Left && this.Bottom > other.Top && this.Left < other.Right;
         }
     }
 }

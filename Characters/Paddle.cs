@@ -9,7 +9,7 @@ namespace Pongo3.Characters
 {
     internal class Paddle
     {
-        protected RectangleF Bounds;
+        public RectangleF Bounds { get; protected set; }
         protected Vector2 ScreenSize;
         protected Texture2D Texture;
         protected Vector2 Velocity;
