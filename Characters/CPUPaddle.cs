@@ -22,6 +22,7 @@ namespace Pongo3.Characters
             }
 
             this.ConstrainToScreenBounds();
+            base.Update();
         }
         public override void Draw(SpriteBatch sb, Texture2D pixel)
         {

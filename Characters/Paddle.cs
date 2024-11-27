@@ -17,6 +17,7 @@ namespace Pongo3.Characters
         protected bool IsFlipX { get; private set; }
         protected float Scale { get; private set; }
         private SpriteEffects spriteEffects;
+        private bool KnockbackAnimationStart;
         public Paddle(Game game, Texture2D texture, float scale, Vector2 position)
         {
             this.ScreenSize = game.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
@@ -49,7 +50,8 @@ namespace Pongo3.Characters
 
         public virtual void Update()
         {
-            //Console.WriteLine("This method hasn't been overriden!");
+            if (this.KnockbackAnimationStart)
+                this.ResetPaddleOrigin();
         }
         protected void ConstrainToScreenBounds()
         {
@@ -83,6 +85,22 @@ namespace Pongo3.Characters
             }
 
             this.Bounds.Position += this.Velocity;
+        }
+        public void SetHit()
+        {
+            float hitDirection = this.IsFlipX ? -1f : 1f;
+            this.TextureOrigin.X = 1.5f * hitDirection;
+            this.KnockbackAnimationStart = true;
+        }
+        protected void ResetPaddleOrigin()
+        {
+            float hitDirection = this.IsFlipX ? -1f : 1f;
+            this.TextureOrigin.X = MathHelper.Lerp(this.TextureOrigin.X, 0f, 0.1f);
+            if (!this.IsFlipX && this.TextureOrigin.X < 0.1f || this.IsFlipX && this.TextureOrigin.X > -0.1f)
+            {
+                this.TextureOrigin.X = 0f;
+                this.KnockbackAnimationStart = false;
+            }
         }
     }
 }
