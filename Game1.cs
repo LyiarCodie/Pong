@@ -48,6 +48,9 @@ namespace Pongo3
             KeyboardManager.Update();
             if (KeyboardManager.IsKeyPress(Keys.Escape)) this.Exit();
 
+            this.playerPaddle.Update();
+            this.cpuPaddle.Update();
+
             base.Update(gameTime);
         }
 
