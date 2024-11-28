@@ -22,7 +22,7 @@ namespace Pongo3.Characters
 
             this.maxSpeed = 7f;
             this.acceleration = 0.25f;
-            this.resistence = 0.4f;
+            this.resistence = 0.99f;
             this.screenCenter = this.ScreenSize * 0.5f;
         }
         public override void Update()
@@ -62,7 +62,13 @@ namespace Pongo3.Characters
                         if (this.Velocity.Y > -this.maxSpeed)
                             this.Velocity.Y -= this.acceleration;
                     }
-                    this.Bounds.Position += this.Velocity * this.resistence;
+
+                    if (MathHelper.Distance(this.Bounds.Center.Y, this.screenCenter.Y) < 0.1f) 
+                        this.Velocity.Y = 0f;
+
+                    this.Velocity.Y *= this.resistence;
+
+                    this.Bounds.Position += this.Velocity;
                 }
 
             }
