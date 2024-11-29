@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pongo2;
+using System;
 
 namespace Pongo3.Characters
 {
@@ -12,6 +13,8 @@ namespace Pongo3.Characters
         private float moveSpeed;
         private float normalize;
         private Vector2 screenSize;
+        private int bounceCount;
+        private Random random;
         public Ball(Game game, Texture2D texture, float scale)
         {
             this.screenSize = game.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
@@ -19,6 +22,7 @@ namespace Pongo3.Characters
             this.Bounds = new RectangleF(Vector2.Zero, this.texture.Bounds.Size.ToVector2() * scale);
             this.moveSpeed = 4f;
             this.Velocity = new Vector2(-1f, -1f) / 1.25f;
+            this.random = new Random();
         }
         public void Update()
         {
@@ -34,10 +38,16 @@ namespace Pongo3.Characters
             }
 
             this.Bounds.Position += this.Velocity * this.moveSpeed;
+
+            this.ResetBallPosition();
         }
         public void InvertVelocityX()
         {
             this.Velocity = new Vector2(this.Velocity.X * -1f, this.Velocity.Y);
+
+            this.bounceCount++;
+            if (this.bounceCount > 1)
+                this.moveSpeed += 0.25f;
         }
         public void Draw(SpriteBatch sb, Texture2D pixel)
         {
@@ -52,6 +62,37 @@ namespace Pongo3.Characters
         public void Draw(SpriteBatch sb)
         {
             sb.Draw(this.texture, this.Bounds.ToRectangle(), Color.White);
+        }
+        
+        private void ResetBallPosition()
+        {
+            if (this.Bounds.Left > this.screenSize.X || this.Bounds.Right < 0f)
+            {
+                this.Velocity = Vector2.Zero;
+                this.Bounds.Center = this.screenSize / 2f;
+                this.moveSpeed = 4f;
+            }
+        }
+    
+        public void StartMove()
+        {
+            this.Velocity = new Vector2(this.GetRandomSingle(), this.GetRandomSingle());
+        }
+        private float GetRandomSingle()
+        {
+            // using recursivity
+            //float value = this.random.NextSingle() * 2.0f - 1.0f;
+            //if (value > -0.5f && value < 0.5f) 
+            //    return this.GetRandomSingle();
+            //return value;
+
+            float value = 0.0f;
+            do
+            {
+                value = this.random.NextSingle() * 2.0f - 1.0f;
+            }
+            while (value > -0.5f && value < 0.5f);
+            return value;
         }
     }
 }

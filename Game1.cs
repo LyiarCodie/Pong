@@ -80,7 +80,7 @@ namespace Pongo3
                 this.cpuPaddle.SetHit();
             }
 
-            if (KeyboardManager.IsKeyPress(Keys.Space)) this.ball.NewPositionAndDirection();
+            if (KeyboardManager.IsKeyPress(Keys.Space)) this.ball.StartMove();
 
             base.Update(gameTime);
         }

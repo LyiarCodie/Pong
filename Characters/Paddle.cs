@@ -57,7 +57,7 @@ namespace Pongo3.Characters
         {
             if (this.Bounds.Bottom > this.ScreenSize.Y) this.Bounds.Bottom = this.ScreenSize.Y;
             if (this.Bounds.Top < 0f) this.Bounds.Top = 0f;
-            if (this.Bounds.Bottom > this.ScreenSize.Y || this.Bounds.Top < 0f) this.Velocity = Vector2.Zero;
+            if (this.Bounds.Bottom >= this.ScreenSize.Y || this.Bounds.Top <= 0f) this.Velocity = Vector2.Zero;
         }
         protected void Move(Keys upKey, Keys downKey, float maxSpeed = 7f, float acceleration = 0.25f, float friction = 0.25f)
         {
