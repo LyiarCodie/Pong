@@ -19,6 +19,9 @@ namespace Pongo3
         private CPUPaddle cpuPaddle;
         private Ball ball;
         private float Scale;
+        private bool IsGameOver;
+        private bool IsGameBegin;
+        private Vector2 screenSize;
 
         public Game1()
         {
@@ -30,13 +33,14 @@ namespace Pongo3
         protected override void Initialize()
         {
             this.Scale = 2f;
+            this.IsGameOver = true;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            Vector2 screenSize = this.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
+            this.screenSize = this.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.pixel = Content.Load<Texture2D>("whitepixel");
@@ -56,31 +60,51 @@ namespace Pongo3
         {
             KeyboardManager.Update();
             if (KeyboardManager.IsKeyPress(Keys.Escape)) this.Exit();
-
-            this.playerPaddle.Update();
-            this.cpuPaddle.Update();
-            this.ball.Update();
-
-            if (this.ball.Bounds.Intersects(this.playerPaddle.Bounds))
+            
+            if (this.IsGameBegin)
             {
-                if (this.ball.Bounds.Left < this.playerPaddle.Bounds.Right)
-                {
-                    this.ball.Bounds.Left = this.playerPaddle.Bounds.Right;
-                    this.ball.InvertVelocityX();
-                }
-                this.playerPaddle.SetHit();
-            }
-            if (this.ball.Bounds.Intersects(this.cpuPaddle.Bounds))
-            {
-                if (this.ball.Bounds.Right > this.cpuPaddle.Bounds.Left)
-                {
-                    this.ball.Bounds.Right = this.cpuPaddle.Bounds.Left;
-                    this.ball.InvertVelocityX();
-                }
-                this.cpuPaddle.SetHit();
+                this.playerPaddle.Update();
+                this.cpuPaddle.Update();
             }
 
-            if (KeyboardManager.IsKeyPress(Keys.Space)) this.ball.StartMove();
+            if (!this.IsGameOver && this.IsGameBegin)
+            {
+                this.ball.Update();
+
+                if (this.ball.Bounds.Intersects(this.playerPaddle.Bounds))
+                {
+                    if (this.ball.Bounds.Left < this.playerPaddle.Bounds.Right)
+                    {
+                        this.ball.Bounds.Left = this.playerPaddle.Bounds.Right;
+                        this.ball.InvertVelocityX();
+                    }
+                    this.playerPaddle.SetHit();
+                }
+                if (this.ball.Bounds.Intersects(this.cpuPaddle.Bounds))
+                {
+                    if (this.ball.Bounds.Right > this.cpuPaddle.Bounds.Left)
+                    {
+                        this.ball.Bounds.Right = this.cpuPaddle.Bounds.Left;
+                        this.ball.InvertVelocityX();
+                    }
+                    this.cpuPaddle.SetHit();
+                }
+                if (this.ball.Bounds.Right <= 0f || this.ball.Bounds.Left >= this.screenSize.X)
+                {
+                    this.IsGameOver = true;
+                    this.ball.ResetBallPosition();
+                }
+            }
+
+            if (this.IsGameOver || !this.IsGameBegin)
+            {
+                if (KeyboardManager.IsKeyPress(Keys.Space))
+                {
+                    this.ball.StartMove();
+                    this.IsGameOver = false;
+                    this.IsGameBegin = true;
+                }
+            }
 
             base.Update(gameTime);
         }

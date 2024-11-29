@@ -38,8 +38,6 @@ namespace Pongo3.Characters
             }
 
             this.Bounds.Position += this.Velocity * this.moveSpeed;
-
-            this.ResetBallPosition();
         }
         public void InvertVelocityX()
         {
@@ -64,7 +62,7 @@ namespace Pongo3.Characters
             sb.Draw(this.texture, this.Bounds.ToRectangle(), Color.White);
         }
         
-        private void ResetBallPosition()
+        public void ResetBallPosition()
         {
             if (this.Bounds.Left > this.screenSize.X || this.Bounds.Right < 0f)
             {
