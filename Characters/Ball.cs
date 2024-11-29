@@ -15,9 +15,9 @@ namespace Pongo3.Characters
         private Vector2 screenSize;
         private int bounceCount;
         private Random random;
-        public Ball(Game game, Texture2D texture, float scale)
+        public Ball(Vector2 screenSize, Texture2D texture, float scale)
         {
-            this.screenSize = game.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
+            this.screenSize = screenSize;
             this.texture = texture;
             this.Bounds = new RectangleF(Vector2.Zero, this.texture.Bounds.Size.ToVector2() * scale);
             this.moveSpeed = 4f;

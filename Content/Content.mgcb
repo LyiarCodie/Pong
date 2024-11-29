@@ -49,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:dividing_line.png
 
+#begin gameFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:gameFont.spritefont
+
 #begin paddle.png
 /importer:TextureImporter
 /processor:TextureProcessor

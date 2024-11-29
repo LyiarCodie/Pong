@@ -8,7 +8,7 @@ namespace Pongo3.Characters
 {
     internal class CPUPaddle : Paddle
     {
-        private bool IsControllable;
+        public bool IsControllable;
         private Ball ball;
         private float maxSpeed;
         private float acceleration;
@@ -17,7 +17,7 @@ namespace Pongo3.Characters
         public CPUPaddle(Game game, Texture2D texture, float scale, Vector2 position, Ball ball) : base(game, texture, scale, position)
         {
             this.SetFlipX();
-            this.IsControllable = false;
+            this.IsControllable = true;
             this.ball = ball;
 
             this.maxSpeed = 7f;

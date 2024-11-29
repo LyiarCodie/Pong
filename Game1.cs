@@ -21,7 +21,9 @@ namespace Pongo3
         private float Scale;
         private bool IsGameOver;
         private bool IsGameBegin;
-        private Vector2 screenSize;
+        public Vector2 ScreenSize;
+        private UI ui;
+        public int PlayerScore, CPUScore;
 
         public Game1()
         {
@@ -40,20 +42,22 @@ namespace Pongo3
 
         protected override void LoadContent()
         {
-            this.screenSize = this.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
+            this.ScreenSize = this.GraphicsDevice.Viewport.Bounds.Size.ToVector2();
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.pixel = Content.Load<Texture2D>("whitepixel");
             var dividingLineTexture = Content.Load<Texture2D>("dividing_line");
-            this.dividingLine = new DividingLine(dividingLineTexture, new Vector2(screenSize.X * 0.5f, 0f), this.Scale);
+            this.dividingLine = new DividingLine(dividingLineTexture, new Vector2(ScreenSize.X * 0.5f, 0f), this.Scale);
 
             var ballTexture = Content.Load<Texture2D>("ball");
-            this.ball = new Ball(this, ballTexture, this.Scale);
-            this.ball.Bounds.Center = screenSize * 0.5f;
+            this.ball = new Ball(this.ScreenSize, ballTexture, this.Scale);
+            this.ball.Bounds.Center = ScreenSize * 0.5f;
 
             var paddleTexture = Content.Load<Texture2D>("paddle");
-            this.playerPaddle = new PlayerPaddle(this, paddleTexture, this.Scale, new Vector2(15f, screenSize.Y * 0.5f));
-            this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(screenSize.X - 15f, screenSize.Y * 0.5f), this.ball);
+            this.playerPaddle = new PlayerPaddle(this, paddleTexture, this.Scale, new Vector2(15f, ScreenSize.Y * 0.5f));
+            this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(ScreenSize.X - 15f, ScreenSize.Y * 0.5f), this.ball);
+
+            this.ui = new UI(Content.Load<SpriteFont>("gameFont"), this);
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,44 +75,42 @@ namespace Pongo3
             {
                 this.ball.Update();
 
-                if (this.ball.Bounds.Intersects(this.playerPaddle.Bounds))
+                this.UpdateScore();
+                this.InvertBallX();
+                this.HandleGameOver();
+            }
+
+            if (!this.ui.PrepareToPlay)
+            {
+                // player vs player
+                if (KeyboardManager.IsKeyPress(Keys.D1))
                 {
-                    if (this.ball.Bounds.Left < this.playerPaddle.Bounds.Right)
-                    {
-                        this.ball.Bounds.Left = this.playerPaddle.Bounds.Right;
-                        this.ball.InvertVelocityX();
-                    }
-                    this.playerPaddle.SetHit();
+                    this.cpuPaddle.IsControllable = true;
+                    this.ui.PrepareToPlay = true;
+                    this.ui.PlayingWithCPU = false;
                 }
-                if (this.ball.Bounds.Intersects(this.cpuPaddle.Bounds))
+                // player vs cpu
+                else if (KeyboardManager.IsKeyPress(Keys.D2))
                 {
-                    if (this.ball.Bounds.Right > this.cpuPaddle.Bounds.Left)
-                    {
-                        this.ball.Bounds.Right = this.cpuPaddle.Bounds.Left;
-                        this.ball.InvertVelocityX();
-                    }
-                    this.cpuPaddle.SetHit();
-                }
-                if (this.ball.Bounds.Right <= 0f || this.ball.Bounds.Left >= this.screenSize.X)
-                {
-                    this.IsGameOver = true;
-                    this.ball.ResetBallPosition();
+                    this.cpuPaddle.IsControllable = false;
+                    this.ui.PrepareToPlay = true;
+                    this.ui.PlayingWithCPU = true;
                 }
             }
 
-            if (this.IsGameOver || !this.IsGameBegin)
+            if ((this.IsGameOver || !this.IsGameBegin) && this.ui.PrepareToPlay)
             {
                 if (KeyboardManager.IsKeyPress(Keys.Space))
                 {
                     this.ball.StartMove();
                     this.IsGameOver = false;
                     this.IsGameBegin = true;
+                    this.ui.ShowInstructions = false;
                 }
             }
 
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(new Color(36, 63, 114));
@@ -118,9 +120,49 @@ namespace Pongo3
             this.playerPaddle.Draw(this.spriteBatch, this.pixel);
             this.cpuPaddle.Draw(this.spriteBatch, this.pixel);
             this.ball.Draw(this.spriteBatch, this.pixel);
+            this.ui.Draw(this.spriteBatch);
             this.spriteBatch.End();
 
             base.Draw(gameTime);
         }
+        private void UpdateScore()
+        {
+            if (this.ball.Bounds.Right < 0f) 
+                this.CPUScore++;
+            if (this.ball.Bounds.Left > this.ScreenSize.X) 
+                this.PlayerScore++;
+        }
+        private void HandleGameOver()
+        {
+            if (this.ball.Bounds.Right <= 0f || this.ball.Bounds.Left >= this.ScreenSize.X)
+            {
+                this.IsGameOver = true;
+                this.ball.ResetBallPosition();
+                this.ui.ShowInstructions = true;
+                this.ui.PrepareToPlay = false;
+            }
+        }
+        private void InvertBallX()
+        {
+            if (this.ball.Bounds.Intersects(this.playerPaddle.Bounds))
+            {
+                if (this.ball.Bounds.Left < this.playerPaddle.Bounds.Right)
+                {
+                    this.ball.Bounds.Left = this.playerPaddle.Bounds.Right;
+                    this.ball.InvertVelocityX();
+                }
+                this.playerPaddle.SetHit();
+            }
+            if (this.ball.Bounds.Intersects(this.cpuPaddle.Bounds))
+            {
+                if (this.ball.Bounds.Right > this.cpuPaddle.Bounds.Left)
+                {
+                    this.ball.Bounds.Right = this.cpuPaddle.Bounds.Left;
+                    this.ball.InvertVelocityX();
+                }
+                this.cpuPaddle.SetHit();
+            }
+        }
+        
     }
 }
