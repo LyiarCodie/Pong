@@ -19,7 +19,7 @@ namespace Pongo3.Characters
         }
         public override void Draw(SpriteBatch sb, Texture2D pixel)
         {
-            base.Draw(sb, pixel);
+            //base.Draw(sb, pixel);
             base.Draw(sb);
         }
     }

@@ -49,7 +49,7 @@ namespace Pongo3.Characters
         }
         public void Draw(SpriteBatch sb, Texture2D pixel)
         {
-            sb.Draw(pixel, this.Bounds.ToRectangle(), Color.MonoGameOrange);
+            //sb.Draw(pixel, this.Bounds.ToRectangle(), Color.MonoGameOrange);
             sb.Draw(this.texture, this.Bounds.ToRectangle(), Color.White);
         }
 
