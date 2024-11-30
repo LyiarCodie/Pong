@@ -24,6 +24,7 @@ namespace Pongo3
         public Vector2 ScreenSize;
         private UI ui;
         public int PlayerScore, CPUScore;
+        private Background background;
 
         public Game1()
         {
@@ -58,6 +59,8 @@ namespace Pongo3
             this.cpuPaddle = new CPUPaddle(this, paddleTexture, this.Scale, new Vector2(ScreenSize.X - 15f, ScreenSize.Y * 0.5f), this.ball);
 
             this.ui = new UI(Content.Load<SpriteFont>("gameFont"), this);
+
+            this.background = new Background(this.ScreenSize);
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,13 +112,16 @@ namespace Pongo3
                 }
             }
 
+            this.background.Update();
+
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(36, 63, 114));
+            GraphicsDevice.Clear(Color.Black);
 
             this.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            this.background.Draw(this.spriteBatch, this.pixel);
             this.dividingLine.Draw(this.spriteBatch);
             this.playerPaddle.Draw(this.spriteBatch, this.pixel);
             this.cpuPaddle.Draw(this.spriteBatch, this.pixel);
