@@ -2,7 +2,7 @@
 
 :video_game: This project was made entirely with [**MonoGame**](https://monogame.net) as a **guide for beginners in game development**.
 
-:space_invader: You can follow the complete guide and find out [**How To Create A Pong Game**](https://lyiar.vercel.app/posts/how-to-create-a-pong-game) from scratch in my blog.
+:space_invader: You can follow the complete guide and find out [**How To Create A Pong Game**](https://lyiar.vercel.app/projects/pong/) from scratch in my blog.
 
 > :tada: The guide is completely free!
 
